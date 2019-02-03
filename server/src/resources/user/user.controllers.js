@@ -18,3 +18,22 @@ export const updateMe = async (req, res) => {
     res.status(400).end()
   }
 }
+
+export const getAll = async (req, res) => {
+  try {
+    const users = await User.find({ role: 'User' })
+      .lean()
+      .exec()
+
+    res.status(200).json({ data: users })
+  } catch (error) {
+    console.log(error)
+    res.status(400).end()
+  }
+}
+
+export const getById = async (req, res) => {}
+
+export const updateById = async (req, res) => {}
+
+export const deleteById = async (req, res) => {}

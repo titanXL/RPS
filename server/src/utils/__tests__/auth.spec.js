@@ -227,7 +227,7 @@ describe('Authentication:', () => {
 
       const res = {
         status(status) {
-          expect(status).toBe(401)
+          expect(status).toBe(403)
           return this
         },
         send(msg) {

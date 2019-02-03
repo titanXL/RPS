@@ -6,6 +6,9 @@ import cors from 'cors'
 import { signup, signin, protect, admin } from './utils/auth'
 import { connect } from './utils/db'
 import { seedAdmin } from './resources/user/user.model'
+import userRouter from './resources/user/user.router'
+import error from './middleware/error'
+import { logger } from './config/logging'
 
 export const app = express()
 
@@ -20,14 +23,18 @@ app.post('/signup', protect, admin, signup)
 app.post('/signin', signin)
 
 app.use('/api', protect)
+app.use('/api/users', protect, userRouter)
+app.use(error)
 
 export const start = async () => {
   try {
-    await connect().then(seedAdmin)
+    await connect()
+      .then(seedAdmin)
+      .then(() => console.info('Connected to DB'))
     app.listen(config.port, () => {
-      console.log(`REST API on http://localhost:${config.port}/api`)
+      console.info(`REST API on http://localhost:${config.port}/api`)
     })
   } catch (e) {
-    console.error(e)
+    logger.error(e.message, e)
   }
 }

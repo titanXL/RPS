@@ -1,10 +1,12 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import Joi from 'joi'
 
 const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
+      minlength: [5, 'Username should be at least 5 chars long'],
       required: true,
       unique: true,
       trim: true
@@ -63,6 +65,19 @@ export const seedAdmin = async () => {
     role: 'Admin'
   })
   return admin
+}
+
+export const validateUser = user => {
+  const schema = {
+    username: Joi.string()
+      .min(5)
+      .required(),
+    password: Joi.string()
+      .min(5)
+      .required()
+  }
+
+  return Joi.validate(user, schema)
 }
 
 export const User = mongoose.model('user', userSchema)

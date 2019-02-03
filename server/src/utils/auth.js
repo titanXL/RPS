@@ -1,5 +1,5 @@
 import config from '../config'
-import { User } from '../resources/user/user.model'
+import { User, validateUser } from '../resources/user/user.model'
 import jwt from 'jsonwebtoken'
 
 export const newToken = user => {
@@ -17,8 +17,9 @@ export const verifyToken = token =>
   })
 
 export const signup = async (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    return res.status(400).send({ message: 'need email and password' })
+  const { error } = validateUser(req.body)
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message })
   }
 
   try {
@@ -26,13 +27,15 @@ export const signup = async (req, res) => {
     const token = newToken(user)
     return res.status(201).send({ token })
   } catch (e) {
+    console.log(e.errors)
     return res.status(500).end()
   }
 }
 
 export const signin = async (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    return res.status(400).send({ message: 'need email and password' })
+  const { error } = validateUser(req.body)
+  if (error) {
+    return res.status(400).send({ message: error.details[0].message })
   }
 
   const invalid = { message: 'Invalid email and passoword combination' }
@@ -91,7 +94,7 @@ export const protect = async (req, res, next) => {
 export const admin = async (req, res, next) => {
   if (req.user.role !== 'Admin') {
     return res
-      .status(401)
+      .status(403)
       .send({ message: 'You need to be an administrator to proceed' })
   }
   next()
