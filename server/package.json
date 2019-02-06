@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.13",
+    "mongoose-encryption": "^2.0.1",
     "morgan": "^1.9.1",
     "validator": "^10.9.0",
     "winston": "^3.2.1",
@@ -58,7 +59,8 @@
     "nodemon": "^1.18.3",
     "prettier": "^1.15.2",
     "rimraf": "^2.6.2",
-    "supertest": "^3.3.0"
+    "superagent": "^4.1.0",
+    "supertest": "^3.4.2"
   },
   "jest": {
     "verbose": true,

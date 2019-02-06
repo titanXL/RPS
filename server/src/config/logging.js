@@ -6,7 +6,6 @@ require('express-async-errors')
 process.on('unhandledRejection', ex => {
   throw ex
 })
-console.log(path.join(__dirname, '../logs/uncaughtExceptions.log'))
 
 export const logger = winston.createLogger({
   level: 'info',

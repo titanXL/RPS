@@ -7,6 +7,7 @@ import { signup, signin, protect, admin } from './utils/auth'
 import { connect } from './utils/db'
 import { seedAdmin } from './resources/user/user.model'
 import userRouter from './resources/user/user.router'
+import studentRouter from './resources/student/student.router'
 import error from './middleware/error'
 import { logger } from './config/logging'
 
@@ -23,7 +24,8 @@ app.post('/signup', protect, admin, signup)
 app.post('/signin', signin)
 
 app.use('/api', protect)
-app.use('/api/users', protect, userRouter)
+app.use('/api/users', userRouter)
+app.use('/api/students', studentRouter)
 app.use(error)
 
 export const start = async () => {
