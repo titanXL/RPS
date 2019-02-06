@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true
+      required: true,
+      select: false
     },
     role: {
       type: String,
@@ -80,4 +81,4 @@ export const validateUser = user => {
   return Joi.validate(user, schema)
 }
 
-export const User = mongoose.model('user', userSchema)
+export const User = mongoose.model('User', userSchema)
