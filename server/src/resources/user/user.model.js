@@ -40,6 +40,14 @@ userSchema.pre('save', function(next) {
   })
 })
 
+userSchema.post('save', function(error, _, next) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    next(new Error('Username already exists'))
+  } else {
+    next()
+  }
+})
+
 userSchema.methods.checkPassword = function(password) {
   const passwordHash = this.password
   return new Promise((resolve, reject) => {

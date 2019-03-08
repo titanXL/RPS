@@ -69,25 +69,28 @@ describe('Authentication:', () => {
     })
 
     test('returns status 400 if user already exists', async () => {
-      await User.create({
+      expect.assertions(2)
+
+      const user = await User.create({
         username: 'testing',
         password: 'testing'
       })
+
       const req = {
-        body: {
-          username: 'testing',
-          password: 'testing'
-        }
+        body: user
       }
+
       const res = {
         status(status) {
           expect(status).toBe(400)
           return this
         },
-        async send() {}
+        async send(result) {
+          expect(typeof result.message).toBe('string')
+        }
       }
 
-      await signup(req, res, () => {})
+      await signup(req, res, e => console.log(e))
     })
   })
 
