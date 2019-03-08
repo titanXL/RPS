@@ -12,13 +12,16 @@ router.param('userid', async (req, res, next) => {
       .lean()
       .exec()
     if (!user) {
-      res.status(404).send({ message: 'User not found' })
+      res.status(404).send({ data: 'User not found' })
     }
     req.user = user
     next()
   } catch (error) {
     logger.error(error)
-    res.status(400).send({ message: 'Something went wrong with the user' })
+    error.customMessage = `Something went wrong fetching user with id ${
+      req.params.userid
+    }`
+    next(error)
   }
 })
 

@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      minlength: [5, 'Username should be at least 5 chars long'],
+      minlength: [3, 'Username should be at least 3 chars long'],
       required: true,
       unique: true,
       trim: true
@@ -14,8 +14,7 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
-      select: false
+      required: true
     },
     role: {
       type: String,
@@ -71,7 +70,7 @@ export const seedAdmin = async () => {
 export const validateUser = user => {
   const schema = {
     username: Joi.string()
-      .min(5)
+      .min(3)
       .required(),
     password: Joi.string()
       .min(5)

@@ -14,6 +14,7 @@ import { logger } from './config/logging'
 export const app = express()
 
 app.disable('x-powered-by')
+// TODO: install helmet
 
 app.use(cors())
 app.use(json())

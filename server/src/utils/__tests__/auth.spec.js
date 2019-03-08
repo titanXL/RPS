@@ -45,7 +45,12 @@ describe('Authentication:', () => {
     test('creates user and and sends new token from user', async () => {
       expect.assertions(2)
 
-      const req = { body: { username: 'hello@hello.com', password: '293jssh' } }
+      const req = {
+        body: {
+          username: 'testing',
+          password: 'testing'
+        }
+      }
       const res = {
         status(status) {
           expect(status).toBe(201)
@@ -56,11 +61,33 @@ describe('Authentication:', () => {
           user = await User.findById(user.id)
             .lean()
             .exec()
-          expect(user.username).toBe('hello@hello.com')
+          expect(user.username).toBe('testing')
         }
       }
 
       await signup(req, res)
+    })
+
+    test('returns status 400 if user already exists', async () => {
+      await User.create({
+        username: 'testing',
+        password: 'testing'
+      })
+      const req = {
+        body: {
+          username: 'testing',
+          password: 'testing'
+        }
+      }
+      const res = {
+        status(status) {
+          expect(status).toBe(400)
+          return this
+        },
+        async send() {}
+      }
+
+      await signup(req, res, () => {})
     })
   })
 
@@ -79,13 +106,18 @@ describe('Authentication:', () => {
         }
       }
 
-      await signin(req, res)
+      await signin(req, res, () => {})
     })
 
     test('user must be real', async () => {
       expect.assertions(2)
 
-      const req = { body: { username: 'hello@hello.com', password: '293jssh' } }
+      const req = {
+        body: {
+          username: 'testing',
+          password: 'testing'
+        }
+      }
       const res = {
         status(status) {
           expect(status).toBe(401)
@@ -96,18 +128,23 @@ describe('Authentication:', () => {
         }
       }
 
-      await signin(req, res)
+      await signin(req, res, () => {})
     })
 
     test('passwords must match', async () => {
       expect.assertions(2)
 
       await User.create({
-        username: 'hello@me.com',
-        password: 'yoyoyo'
+        username: 'testing',
+        password: 'testing'
       })
 
-      const req = { body: { username: 'hello@me.com', password: 'wrong' } }
+      const req = {
+        body: {
+          username: 'testing',
+          password: 'wrong'
+        }
+      }
       const res = {
         status(status) {
           expect(status).toBe(401)
@@ -118,14 +155,14 @@ describe('Authentication:', () => {
         }
       }
 
-      await signin(req, res)
+      await signin(req, res, e => console.log(e))
     })
 
     test('creates new token', async () => {
       expect.assertions(2)
       const fields = {
-        username: 'hello@me.com',
-        password: 'yoyoyo'
+        username: 'testing',
+        password: 'testing'
       }
       const savedUser = await User.create(fields)
 
@@ -144,7 +181,7 @@ describe('Authentication:', () => {
         }
       }
 
-      await signin(req, res)
+      await signin(req, res, e => console.log(e))
     })
   })
 
@@ -192,7 +229,7 @@ describe('Authentication:', () => {
           expect(status).toBe(401)
           return this
         },
-        end() {
+        async send(result) {
           expect(true).toBe(true)
         }
       }
@@ -202,8 +239,8 @@ describe('Authentication:', () => {
 
     test('finds user form token and passes on', async () => {
       const user = await User.create({
-        username: 'hello@hello.com',
-        password: '1234'
+        username: 'testing',
+        password: 'testing'
       })
       const token = `Bearer ${newToken(user)}`
       const req = { headers: { authorization: token } }

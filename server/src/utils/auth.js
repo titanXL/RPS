@@ -1,6 +1,7 @@
+import jwt from 'jsonwebtoken'
 import config from '../config'
 import { User, validateUser } from '../resources/user/user.model'
-import jwt from 'jsonwebtoken'
+import { logger } from '../config/logging'
 
 export const newToken = user => {
   return jwt.sign({ id: user.id, role: user.role }, config.secrets.jwt, {
@@ -16,7 +17,7 @@ export const verifyToken = token =>
     })
   })
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { error } = validateUser(req.body)
   if (error) {
     return res.status(400).send({ message: error.details[0].message })
@@ -27,30 +28,28 @@ export const signup = async (req, res) => {
     const token = newToken(user)
     return res.status(201).send({ token })
   } catch (e) {
-    console.log(e.errors)
-    return res.status(500).end()
+    logger.info(e.errors)
+    next(e)
   }
 }
 
-export const signin = async (req, res) => {
+export const signin = async (req, res, next) => {
   const { error } = validateUser(req.body)
   if (error) {
     return res.status(400).send({ message: error.details[0].message })
   }
 
-  const invalid = { message: 'Invalid email and passoword combination' }
+  const invalid = { message: 'Invalid email and password combination' }
 
   try {
     const user = await User.findOne({ username: req.body.username })
       .select('username password role')
       .exec()
-
     if (!user) {
       return res.status(401).send(invalid)
     }
 
     const match = await user.checkPassword(req.body.password)
-
     if (!match) {
       return res.status(401).send(invalid)
     }
@@ -58,8 +57,8 @@ export const signin = async (req, res) => {
     const token = newToken(user)
     return res.status(201).send({ token })
   } catch (e) {
-    console.error(e)
-    res.status(500).end()
+    logger.info(e)
+    next(e)
   }
 }
 
@@ -75,7 +74,7 @@ export const protect = async (req, res, next) => {
   try {
     payload = await verifyToken(token)
   } catch (e) {
-    return res.status(401).end()
+    next(e)
   }
 
   const user = await User.findById(payload.id)
@@ -84,7 +83,7 @@ export const protect = async (req, res, next) => {
     .exec()
 
   if (!user) {
-    return res.status(401).end()
+    return res.status(401).send({ message: 'User not found' })
   }
 
   req.user = user

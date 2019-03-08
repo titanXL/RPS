@@ -55,7 +55,7 @@ describe('Tests user controller', () => {
     expect(deletedUser).toBeNull()
   })
 
-  test('DELETE /:userid => response status 400', async () => {
+  test('DELETE /:userid => response status 500', async () => {
     const response = await supertest(app)
       .delete(`/api/users/12333`)
       .set({ Authorization: token, Accept: 'application/json' })

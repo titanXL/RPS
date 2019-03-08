@@ -7,11 +7,7 @@
   "license": "ISC",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "test": "SET NODE_ENV=testing&jest --setupFiles dotenv/config --forceExit --detectOpenHandles  --silent",
-    "test-routes": "npm run test -t router",
-    "test-models": "npm run test -t model",
-    "test-controllers": "npm run test -t controllers",
-    "test-auth": "npm run test -t Authentication:",
+    "test": "SET NODE_ENV=testing&jest --setupFiles dotenv/config --forceExit --detectOpenHandles",
     "dev": "nodemon --exec npm run restart",
     "restart": "rimraf dist && npm run build && npm run start",
     "start": "node dist/index.js"
@@ -63,7 +59,7 @@
     "supertest": "^3.4.2"
   },
   "jest": {
-    "verbose": true,
+    "verbose": false,
     "testURL": "http://localhost/",
     "testEnvironment": "node",
     "setupTestFrameworkScriptFile": "<rootDir>/test-db-setup.js",

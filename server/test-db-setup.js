@@ -2,8 +2,9 @@ import mongoose from 'mongoose'
 import cuid from 'cuid'
 import _ from 'lodash'
 import { User } from './src/resources/user/user.model'
+import { Student } from './src/resources/student/student.model'
 
-const models = { User }
+const models = { User, Student }
 
 const url =
   process.env.MONGODB_URI ||
