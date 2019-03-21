@@ -24,9 +24,7 @@ router.param('teacherid', async (req, res, next) => {
     next()
   } catch (error) {
     logger.error(error)
-    error.customMessage = `Something went wrong fetching teacher with id ${
-      req.params.teacherid
-    }`
+    error.customMessage = `Something went wrong fetching teacher`
     next(error)
   }
 })

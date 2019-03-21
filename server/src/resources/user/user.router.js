@@ -18,9 +18,7 @@ router.param('userid', async (req, res, next) => {
     next()
   } catch (error) {
     logger.error(error)
-    error.customMessage = `Something went wrong fetching user with id ${
-      req.params.userid
-    }`
+    error.customMessage = `Something went wrong fetching user`
     next(error)
   }
 })
