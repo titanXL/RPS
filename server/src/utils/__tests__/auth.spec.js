@@ -57,7 +57,7 @@ describe('Authentication:', () => {
           return this
         },
         async send(result) {
-          let user = await verifyToken(result.token)
+          let user = await verifyToken(result.data)
           user = await User.findById(user.id)
             .lean()
             .exec()
@@ -176,7 +176,7 @@ describe('Authentication:', () => {
           return this
         },
         async send(result) {
-          let user = await verifyToken(result.token)
+          let user = await verifyToken(result.data)
           user = await User.findById(user.id)
             .lean()
             .exec()

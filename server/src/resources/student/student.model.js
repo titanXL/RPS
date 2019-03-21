@@ -42,7 +42,7 @@ const studentSchema = new mongoose.Schema(
       }
     ],
     studentId: String,
-    schoolId: String
+    school: String
   },
   { timestamps: true }
 )
@@ -65,7 +65,7 @@ export const validateStudent = student => {
       .required(),
     pid: Joi.number().required(),
     studentId: Joi.string(),
-    schoolId: Joi.string()
+    school: Joi.string()
   }
   return Joi.validate(student, schema)
 }

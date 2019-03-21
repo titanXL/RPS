@@ -7,7 +7,7 @@ export const getAll = async (req, res, next) => {
       .lean()
       .exec()
 
-    res.status(200).json({ data: users })
+    res.status(200).json({ data: users, type: 'success' })
   } catch (error) {
     logger.info(error)
     error.customMessage = 'Something went wrong fetching users'
@@ -18,7 +18,7 @@ export const getAll = async (req, res, next) => {
 export const getById = async (req, res, next) => {
   try {
     const user = req.user
-    res.status(200).json({ data: user })
+    res.status(200).json({ data: user, type: 'success' })
   } catch (error) {
     logger.info(error)
     error.customMessage = `Something went wrong fetching user ${
@@ -36,7 +36,7 @@ export const updateById = async (req, res, next) => {
       .lean()
       .exec()
 
-    res.status(200).json({ data: user })
+    res.status(200).json({ data: user, type: 'success' })
   } catch (error) {
     logger.info(error)
     error.customMessage = `Something went wrong updating user ${

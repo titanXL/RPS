@@ -3,7 +3,7 @@ import { app } from '../../../server'
 import { User } from '../user.model'
 import { newToken } from '../../../utils/auth'
 
-describe('Tests user controller', () => {
+describe('User controller', () => {
   let user
   let token = 'Bearer '
   beforeEach(async () => {

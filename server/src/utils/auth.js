@@ -20,13 +20,15 @@ export const verifyToken = token =>
 export const signup = async (req, res, next) => {
   const { error } = validateUser(req.body)
   if (error) {
-    return res.status(400).send({ message: error.details[0].message })
+    return res
+      .status(400)
+      .send({ message: error.details[0].message, type: 'error' })
   }
 
   try {
     const user = await User.create(req.body)
     const token = newToken(user)
-    return res.status(201).send({ token })
+    return res.status(201).send({ data: token, type: 'success' })
   } catch (e) {
     logger.info(e.errors)
     next(e)
@@ -36,10 +38,15 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
   const { error } = validateUser(req.body)
   if (error) {
-    return res.status(400).send({ message: error.details[0].message })
+    return res
+      .status(400)
+      .send({ message: error.details[0].message, type: 'error' })
   }
 
-  const invalid = { message: 'Invalid email and password combination' }
+  const invalid = {
+    message: 'Invalid email and password combination',
+    type: 'error'
+  }
 
   try {
     const user = await User.findOne({ username: req.body.username })
@@ -55,7 +62,7 @@ export const signin = async (req, res, next) => {
     }
 
     const token = newToken(user)
-    return res.status(201).send({ token })
+    return res.status(201).send({ data: token, type: 'success' })
   } catch (e) {
     logger.info(e)
     next(e)
@@ -83,7 +90,7 @@ export const protect = async (req, res, next) => {
     .exec()
 
   if (!user) {
-    return res.status(401).send({ message: 'User not found' })
+    return res.status(401).send({ message: 'User not found', type: 'error' })
   }
 
   req.user = user
@@ -92,9 +99,10 @@ export const protect = async (req, res, next) => {
 
 export const admin = async (req, res, next) => {
   if (req.user.role !== 'Admin') {
-    return res
-      .status(403)
-      .send({ message: 'You need to be an administrator to proceed' })
+    return res.status(403).send({
+      message: 'You need to be an administrator to proceed',
+      type: 'error'
+    })
   }
   next()
 }

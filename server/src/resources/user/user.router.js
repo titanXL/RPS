@@ -12,7 +12,7 @@ router.param('userid', async (req, res, next) => {
       .lean()
       .exec()
     if (!user) {
-      res.status(404).send({ data: 'User not found' })
+      res.status(404).send({ message: 'User not found', type: 'error' })
     }
     req.user = user
     next()
