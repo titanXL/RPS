@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAll, getById, updateById, deleteById } from './user.controllers'
+import { getAll, getById, updateById, deleteById } from './user.controller'
 import { User } from './user.model'
 import { logger } from '../../config/logging'
 
