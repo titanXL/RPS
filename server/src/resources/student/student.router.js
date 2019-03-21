@@ -11,7 +11,7 @@ import { logger } from '../../config/logging'
 
 const router = Router()
 
-router.param('studentid', async (req, res, next) => {
+export const prefillStudent = async (req, res, next) => {
   try {
     const studentId = req.params.studentid
     const student = await Student.findById(studentId)
@@ -26,7 +26,9 @@ router.param('studentid', async (req, res, next) => {
     logger.error(error)
     throw new Error('Something went wrong with the student')
   }
-})
+}
+
+router.param('studentid', prefillStudent)
 
 router.get('/', getAllStudents)
 router.get('/:studentid', getStudent)

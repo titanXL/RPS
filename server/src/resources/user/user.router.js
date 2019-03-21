@@ -5,7 +5,7 @@ import { logger } from '../../config/logging'
 
 const router = Router()
 
-router.param('userid', async (req, res, next) => {
+export const prefillUser = async (req, res, next) => {
   try {
     const userId = req.params.userid
     const user = await User.findById(userId)
@@ -21,7 +21,9 @@ router.param('userid', async (req, res, next) => {
     error.customMessage = `Something went wrong fetching user`
     next(error)
   }
-})
+}
+
+router.param('userid', prefillUser)
 
 router.get('/', getAll)
 router.get('/:userid', getById)

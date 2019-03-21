@@ -11,7 +11,7 @@ import { logger } from '../../config/logging'
 
 const router = Router()
 
-router.param('teacherid', async (req, res, next) => {
+export const prefillTeacher = async (req, res, next) => {
   try {
     const teacherid = req.params.teacherid
     const teacher = await Teacher.findById(teacherid)
@@ -27,7 +27,9 @@ router.param('teacherid', async (req, res, next) => {
     error.customMessage = `Something went wrong fetching teacher`
     next(error)
   }
-})
+}
+
+router.param('teacherid', prefillTeacher)
 
 router.get('/', getAll)
 router.post('/', createTeacher)
