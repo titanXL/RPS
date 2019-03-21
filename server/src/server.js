@@ -8,6 +8,7 @@ import { connect } from './utils/db'
 import { seedAdmin } from './resources/user/user.model'
 import userRouter from './resources/user/user.router'
 import studentRouter from './resources/student/student.router'
+import teacherRouter from './resources/teacher/teacher.router'
 import error from './middleware/error'
 import { logger } from './config/logging'
 
@@ -27,6 +28,7 @@ app.post('/signin', signin)
 app.use('/api', protect)
 app.use('/api/users', userRouter)
 app.use('/api/students', studentRouter)
+app.use('/api/teachers', teacherRouter)
 app.use(error)
 
 export const start = async () => {
