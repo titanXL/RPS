@@ -3,8 +3,8 @@ import { logger } from '../../config/logging'
 
 export const createStudent = async (req, res, next) => {
   try {
-    const { name } = req.body
-    const found = await Student.find({ name }).exec()
+    const { email } = req.body
+    const found = await Student.find({ email }).exec()
     if (found.length) {
       logger.info({ error: 'Student is already registered' })
       return res
@@ -18,6 +18,23 @@ export const createStudent = async (req, res, next) => {
     error.customMessage = 'Something went wrong creating student'
     next(error)
   }
+}
+
+export const enrollStudent = async (req, res, next) => {
+  try {
+    const student = req.student
+    student.courses.push(req.body)
+    student.save()
+    return res.status(200).json({ data: student, type: 'success' })
+  } catch (error) {
+    logger.info(error)
+    error.customMessage = 'Something went wrong enrolling student'
+    next(error)
+  }
+}
+
+export const makePayment = async (req, res, next) => {
+  const user = req.user
 }
 
 export const getAllStudents = async (req, res, next) => {
@@ -62,6 +79,17 @@ export const deleteStudent = async (req, res, next) => {
     error.customMessage = `Something went wrong deleting student ${
       req.student.name
     }`
+    next(error)
+  }
+}
+
+export const getAllUnpaid = async (req, res, next) => {
+  try {
+    const allUnpaindStudents = await Student.getUnpaid()
+    return res.status(200).json({ data: allUnpaindStudents })
+  } catch (error) {
+    logger.info(error)
+    error.customMessage = `Something went wrong fetching all unpaid students`
     next(error)
   }
 }

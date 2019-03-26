@@ -8,7 +8,7 @@ describe('Student prefill', () => {
       name: 'test student2',
       email: 'test-student@test.com',
       phoneNumber: '1231234',
-      pid: '123456789'
+      pid: '1234567890'
     })
     let req = { body: {}, params: { studentid: s.id } }
     await prefillStudent(req, {}, () => {})

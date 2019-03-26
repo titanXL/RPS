@@ -16,17 +16,19 @@ const teacherSchema = new mongoose.Schema(
       trim: true,
       minlength: [5, 'Phone number is not correct']
     },
-    teaches: {
-      language: {
-        type: String,
-        required: true,
-        trim: true,
-        minlength: [2, 'Language is required']
-      },
-      level: {
-        type: String
+    teaches: [
+      {
+        language: {
+          type: String,
+          required: true,
+          trim: true,
+          minlength: [2, 'Language is required']
+        },
+        level: {
+          type: String
+        }
       }
-    }
+    ]
   },
   { timestamps: true }
 )

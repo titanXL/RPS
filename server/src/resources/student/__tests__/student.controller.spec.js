@@ -29,7 +29,7 @@ describe('Student controller', () => {
         name: 'test student',
         email: 'test-student@test.com',
         phoneNumber: '123123',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
 
@@ -39,7 +39,7 @@ describe('Student controller', () => {
         name: 'test student',
         email: 'test-student@test.com',
         phoneNumber: '123123',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     expect(response2.status).toBe(400)
@@ -56,7 +56,7 @@ describe('Student controller', () => {
         name: 'test student',
         email: 'test-student@test.com',
         phoneNumber: '123123',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     expect(response.status).toBe(201)
@@ -74,16 +74,16 @@ describe('Student controller', () => {
         name: 'test student',
         email: 'test-student@test.com',
         phoneNumber: '123123',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     await supertest(app)
       .post('/api/students')
       .send({
         name: 'test student2',
-        email: 'test-student@test.com',
+        email: 'test-student1@test.com',
         phoneNumber: '1231234',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
 
@@ -106,7 +106,7 @@ describe('Student controller', () => {
         name: 'test student2',
         email: 'test-student@test.com',
         phoneNumber: '1231234',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     const studentid = JSON.parse(res.text).data._id
@@ -129,7 +129,7 @@ describe('Student controller', () => {
         name: 'test student2',
         email: 'test-student@test.com',
         phoneNumber: '1231234',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     const studentid = JSON.parse(res.text).data._id
@@ -152,7 +152,7 @@ describe('Student controller', () => {
         name: 'test student2',
         email: 'test-student@test.com',
         phoneNumber: '1231234',
-        pid: '123456789'
+        pid: '1234567890'
       })
       .set({ Authorization: token, Accept: 'application/json' })
     const studentid = JSON.parse(res.text).data._id
