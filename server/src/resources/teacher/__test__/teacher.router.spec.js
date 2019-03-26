@@ -6,11 +6,7 @@ describe('Teacher prefill', () => {
     expect.assertions(1)
     const t = await Teacher.create({
       name: 'test teaher',
-      phoneNumber: '123123',
-      teaches: {
-        language: 'English',
-        level: 'A1'
-      }
+      phoneNumber: '123123'
     })
     let req = { body: {}, params: { teacherid: t.id } }
     await prefillTeacher(req, {}, () => {})

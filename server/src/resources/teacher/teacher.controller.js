@@ -65,9 +65,13 @@ export const updateById = async (req, res, next) => {
   }
 }
 
-export const deleteById = async (req, res, next) => {
+// TODO: implement deactivate
+
+export const deactivateById = async (req, res, next) => {
   try {
-    await Teacher.findByIdAndDelete(req.teacher._id)
+    await Teacher.findByIdAndUpdate(req.teacher._id, {
+      status: 'Unactive'
+    })
     res.status(200).end()
   } catch (error) {
     logger.info(error)

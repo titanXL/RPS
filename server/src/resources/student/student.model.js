@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 import encrypt from 'mongoose-encryption'
 import Joi from 'joi'
 

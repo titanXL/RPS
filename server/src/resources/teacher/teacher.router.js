@@ -3,8 +3,8 @@ import {
   getAll,
   getById,
   updateById,
-  deleteById,
-  createTeacher
+  createTeacher,
+  deactivateById
 } from './teacher.controller'
 import { Teacher } from './teacher.model'
 import { logger } from '../../config/logging'
@@ -35,6 +35,6 @@ router.get('/', getAll)
 router.post('/', createTeacher)
 router.get('/:teacherid', getById)
 router.patch('/:teacherid', updateById)
-router.delete('/:teacherid', deleteById)
+router.patch('/:teacherid/deactivate', deactivateById)
 
 export default router

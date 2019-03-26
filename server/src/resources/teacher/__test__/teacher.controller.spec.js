@@ -16,11 +16,7 @@ describe('Teacher controller', () => {
     token += await newToken(user)
     teacher = await Teacher.create({
       name: 'test teaher',
-      phoneNumber: '123123',
-      teaches: {
-        language: 'English',
-        level: 'A1'
-      }
+      phoneNumber: '123123'
     })
   })
 
@@ -39,7 +35,7 @@ describe('Teacher controller', () => {
       .set({ Authorization: token, Accept: 'application/json' })
     const t = JSON.parse(response.text).data
     expect(response.status).toBe(200)
-    expect(t.teaches.language).toBe('English')
+    expect(t.name).toBe('test teaher')
   })
 
   test('GET / returns all teachers', async () => {
@@ -50,23 +46,23 @@ describe('Teacher controller', () => {
     expect(text.data).toHaveLength(1)
   })
 
+  // TODO: Test teaches content/courses
   test('PATCH /:teacherid => returns updated teacher', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
     const response = await supertest(app)
       .patch(`/api/teachers/${teacher.id}`)
-      .send({ teaches: { language: 'Spanish', level: 'B2' } })
+      .send({ name: 'John' })
       .set({ Authorization: token, Accept: 'application/json' })
     const t = JSON.parse(response.text).data
     expect(response.status).toBe(200)
-    expect(t.teaches.language).toBe('Spanish')
-    expect(t.teaches.level).toBe('B2')
+    expect(t.name).toBe('John')
   })
 
-  test('DELETE /:teacherid => void', async () => {
+  test('Deactivate /:teacherid/deactivate => void', async () => {
     await supertest(app)
-      .delete(`/api/teachers/${teacher.id}`)
+      .patch(`/api/teachers/${teacher.id}/deactivate`)
       .set({ Authorization: token, Accept: 'application/json' })
-    const deletedTeacher = await Teacher.findById(teacher.id)
-    expect(deletedTeacher).toBeNull()
+    const deactivatedTeacher = await Teacher.findById(teacher.id)
+    expect(deactivatedTeacher.status).toBe('Unactive')
   })
 })

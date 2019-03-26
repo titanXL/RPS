@@ -18,17 +18,15 @@ const teacherSchema = new mongoose.Schema(
     },
     teaches: [
       {
-        language: {
-          type: String,
-          required: true,
-          trim: true,
-          minlength: [2, 'Language is required']
-        },
-        level: {
-          type: String
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
       }
-    ]
+    ],
+    status: {
+      type: String,
+      enum: ['Active', 'Unactive'],
+      default: 'Active'
+    }
   },
   { timestamps: true }
 )
@@ -40,13 +38,7 @@ export const validateTeacher = teacher => {
       .required(),
     phoneNumber: Joi.string()
       .min(5)
-      .required(),
-    teaches: Joi.object().keys({
-      language: Joi.string()
-        .min(2)
-        .required(),
-      level: Joi.string()
-    })
+      .required()
   }
 
   return Joi.validate(teacher, schema)
