@@ -20,6 +20,6 @@ export const prefillCourse = async (req, res, next) => {
   }
 }
 
-router.param('studentid', prefillCourse)
+router.param('courseid', prefillCourse)
 
 export default router

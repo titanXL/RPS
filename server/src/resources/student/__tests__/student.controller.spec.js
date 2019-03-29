@@ -157,11 +157,10 @@ describe('Student controller', () => {
       .set({ Authorization: token, Accept: 'application/json' })
     const studentid = JSON.parse(res.text).data._id
     const response = await supertest(app)
-      .delete(`/api/students/${studentid}`)
-      .send({ name: 'TESTING STUDENT 2' })
+      .patch(`/api/students/${studentid}/delete`)
       .set({ Authorization: token, Accept: 'application/json' })
     expect(response.status).toBe(200)
-    const found = await Student.findById(studentid).exec()
-    expect(found).toBeNull()
+    const updatedStudent = JSON.parse(response.text).data
+    expect(updatedStudent.status).toBe('Deactivated')
   })
 })

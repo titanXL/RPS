@@ -1,60 +1,38 @@
 import { User } from './user.model'
-import { logger } from '../../config/logging'
+import asyncMiddleware from '../../middleware/async'
 
-export const getAll = async (req, res, next) => {
-  try {
-    const users = await User.find({ role: 'User' })
-      .lean()
-      .exec()
+export const getAll = asyncMiddleware(async (req, res, next) => {
+  const users = await User.find({ role: 'User' })
+    .lean()
+    .exec()
 
-    res.status(200).json({ data: users, type: 'success' })
-  } catch (error) {
-    logger.info(error)
-    error.customMessage = 'Something went wrong fetching users'
-    next(error)
-  }
-}
+  res.status(200).json({ data: users, type: 'success' })
+})
 
-export const getById = async (req, res, next) => {
-  try {
-    const user = req.user
-    res.status(200).json({ data: user, type: 'success' })
-  } catch (error) {
-    logger.info(error)
-    error.customMessage = `Something went wrong fetching user ${
-      req.user.username
-    }`
-    next(error)
-  }
-}
+export const getById = asyncMiddleware(async (req, res, next) => {
+  const user = req.user
+  res.status(200).json({ data: user, type: 'success' })
+})
 
-export const updateById = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+export const updateById = asyncMiddleware(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true
+  })
+    .lean()
+    .exec()
+
+  res.status(200).json({ data: user, type: 'success' })
+})
+
+export const deleteById = asyncMiddleware(async (req, res, next) => {
+  const deactivatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      status: 'Deactivated'
+    },
+    {
       new: true
-    })
-      .lean()
-      .exec()
-
-    res.status(200).json({ data: user, type: 'success' })
-  } catch (error) {
-    logger.info(error)
-    error.customMessage = `Something went wrong updating user ${
-      req.user.username
-    }`
-    next(error)
-  }
-}
-
-export const deleteById = async (req, res, next) => {
-  try {
-    await User.findByIdAndDelete(req.user._id)
-    res.status(200).end()
-  } catch (error) {
-    logger.info(error)
-    error.customMessage = `Something went wrong deleting user ${
-      req.user.username
-    }`
-    next(error)
-  }
-}
+    }
+  )
+  res.status(200).json({ data: deactivatedUser, type: 'success' })
+})

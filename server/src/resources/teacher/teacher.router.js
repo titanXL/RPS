@@ -4,7 +4,8 @@ import {
   getById,
   updateById,
   createTeacher,
-  deactivateById
+  deactivateById,
+  teachCourse
 } from './teacher.controller'
 import { Teacher } from './teacher.model'
 import { logger } from '../../config/logging'
@@ -14,9 +15,7 @@ const router = Router()
 export const prefillTeacher = async (req, res, next) => {
   try {
     const teacherid = req.params.teacherid
-    const teacher = await Teacher.findById(teacherid)
-      .lean()
-      .exec()
+    const teacher = await Teacher.findById(teacherid).exec()
     if (!teacher) {
       res.status(404).send({ message: 'Teacher not found', type: 'error' })
     }
@@ -32,8 +31,9 @@ export const prefillTeacher = async (req, res, next) => {
 router.param('teacherid', prefillTeacher)
 
 router.get('/', getAll)
-router.post('/', createTeacher)
 router.get('/:teacherid', getById)
+router.post('/', createTeacher)
+router.post('/:teacherid/teach/:courseid', teachCourse)
 router.patch('/:teacherid', updateById)
 router.patch('/:teacherid/deactivate', deactivateById)
 

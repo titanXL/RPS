@@ -48,14 +48,15 @@ describe('User controller', () => {
   })
 
   test('DELETE /:userid => void', async () => {
-    await supertest(app)
+    const response = await supertest(app)
       .delete(`/api/users/${user._id}`)
       .set({ Authorization: token, Accept: 'application/json' })
-    const deletedUser = await User.findById(user._id)
-    expect(deletedUser).toBeNull()
+    expect(response.status).toBe(200)
+    const deactivatedUser = JSON.parse(response.text).data
+    expect(deactivatedUser.status).toBe('Deactivated')
   })
 
-  test('DELETE /:userid => response status 500', async () => {
+  test('DELETE /:userid => response status 400', async () => {
     const response = await supertest(app)
       .delete(`/api/users/12333`)
       .set({ Authorization: token, Accept: 'application/json' })

@@ -3,6 +3,9 @@ import { app } from '../../../server'
 import { User } from '../../user/user.model'
 import { newToken } from '../../../utils/auth'
 import { Teacher } from '../teacher.model'
+import { Course } from '../../course/course.model'
+import { Content } from '../../course/course.content.model'
+jest.setTimeout(10000)
 
 describe('Teacher controller', () => {
   let user
@@ -59,10 +62,36 @@ describe('Teacher controller', () => {
   })
 
   test('Deactivate /:teacherid/deactivate => void', async () => {
-    await supertest(app)
+    expect.assertions(1)
+    const response = await supertest(app)
       .patch(`/api/teachers/${teacher.id}/deactivate`)
       .set({ Authorization: token, Accept: 'application/json' })
-    const deactivatedTeacher = await Teacher.findById(teacher.id)
-    expect(deactivatedTeacher.status).toBe('Unactive')
+    const t = JSON.parse(response.text).data
+    expect(t.status).toBe('Deactivated')
+  })
+
+  test('Teach course /:teacherid/teach/:courseid => updated teacher', async () => {
+    expect.assertions(2)
+    const content = await Content.create({
+      language: 'English',
+      level: 'A1'
+    })
+    const course = await Course.create({
+      content: {
+        _id: content.id
+      },
+      duration: {
+        startDate: new Date(2019, 4, 15),
+        endDate: new Date(2019, 4, 16)
+      },
+      cost: 500
+    })
+
+    const response = await supertest(app)
+      .post(`/api/teachers/${teacher.id}/teach/${course.id}`)
+      .set({ Authorization: token, Accept: 'application/json' })
+    const t = JSON.parse(response.text).data
+    expect(response.status).toBe(200)
+    expect(t.teaches).toHaveLength(1)
   })
 })

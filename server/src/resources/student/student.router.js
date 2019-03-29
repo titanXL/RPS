@@ -34,7 +34,7 @@ router.get('/', getAllStudents)
 router.get('/unpaid', getAllUnpaid)
 router.get('/:studentid', getStudent)
 router.patch('/:studentid', updateStudent)
-router.delete('/:studentid', deleteStudent)
+router.patch('/:studentid/delete', deleteStudent)
 router.post('/', createStudent)
 router.post('/:studentid/enroll', enrollStudent)
 

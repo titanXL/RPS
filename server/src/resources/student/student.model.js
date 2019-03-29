@@ -62,7 +62,12 @@ const studentSchema = new mongoose.Schema(
       }
     ],
     studentId: String,
-    school: String
+    school: String,
+    status: {
+      type: String,
+      enum: ['Active', 'Deactivated'],
+      default: 'Active'
+    }
   },
   { timestamps: true }
 )

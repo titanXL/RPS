@@ -24,7 +24,7 @@ const teacherSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ['Active', 'Unactive'],
+      enum: ['Active', 'Deactivated'],
       default: 'Active'
     }
   },
