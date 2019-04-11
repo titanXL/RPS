@@ -2,6 +2,7 @@ import { User } from './user.model'
 import asyncMiddleware from '../../middleware/async'
 
 export const getAll = asyncMiddleware(async (req, res, next) => {
+  // TODO: return only active users
   const users = await User.find({ role: 'User' })
     .lean()
     .exec()

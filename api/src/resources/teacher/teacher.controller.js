@@ -4,6 +4,7 @@ import { logger } from '../../config/logging'
 import asyncMiddleware from '../../middleware/async'
 
 export const getAll = asyncMiddleware(async (req, res, next) => {
+  // TODO: return only active teachers
   const teachers = await Teacher.find({})
     .lean()
     .exec()

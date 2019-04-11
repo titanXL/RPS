@@ -25,6 +25,7 @@ export const makePayment = asyncHandler(async (req, res, next) => {
 })
 
 export const getAllStudents = asyncHandler(async (req, res, next) => {
+  // TODO: return only active students
   const students = await Student.find({}).exec()
   res.status(200).json({ data: students, type: 'success' })
 })
