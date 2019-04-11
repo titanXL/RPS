@@ -47,4 +47,4 @@ sigKey -> Used for encryption of a model field
 
 ## Rest structure:
 
-    An abstract route representation could be found in server.js! Every implemented route can be found in its corresponding model. All routes are flat with a maximum depth of about three levels.
+    An abstract route representation could be found in server.js! Every implemented route can be found in its corresponding model. All routes are flat with a maximum depth of about three levels!
